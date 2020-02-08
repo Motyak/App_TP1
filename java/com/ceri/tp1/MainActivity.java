@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ListView lv = (ListView) findViewById(R.id.list_view);
+        ListView lv = (ListView) findViewById(R.id.lvAnimaux);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, AnimalList.getNameArray());
         lv.setAdapter(adapter);
 

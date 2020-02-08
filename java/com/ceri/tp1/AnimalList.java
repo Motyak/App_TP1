@@ -25,8 +25,6 @@ public class AnimalList {
     public static Animal getAnimal(String name) {
         return hashMap.get(name);
     }
-
-
 }
 
 
