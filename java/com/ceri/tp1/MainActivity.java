@@ -1,13 +1,17 @@
 package com.ceri.tp1;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,18 +20,52 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ListView lv = (ListView) findViewById(R.id.lvAnimaux);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, AnimalList.getNameArray());
-        lv.setAdapter(adapter);
+        RecyclerView rvAnimaux = (RecyclerView) findViewById(R.id.rvAnimaux);
+        rvAnimaux.setHasFixedSize(true);
+        rvAnimaux.setLayoutManager(new LinearLayoutManager(this));
+        rvAnimaux.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        rvAnimaux.setAdapter(new IconicAdapter());
+    }
 
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView parent, View v, int position, long id) {
-                // Do something in response to the click
-                final String item = (String) parent.getItemAtPosition(position);
-                Intent intent = new Intent(MainActivity.this,AnimalActivity.class);
-                intent.putExtra("AnimalName",item);
-                startActivity(intent);
-            }
-        });
+    class IconicAdapter extends RecyclerView.Adapter<RowHolder> {
+        @Override
+        public RowHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new RowHolder(getLayoutInflater().inflate(R.layout.row, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(RowHolder holder, int position) {
+            holder.bindModel(AnimalList.getNameArray()[position]);
+        }
+
+        @Override
+        public int getItemCount() {
+            return AnimalList.getNameArray().length;
+        }
+    }
+
+    static class RowHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView label = null;
+        ImageView icon = null;
+
+        RowHolder(View row) {
+            super(row);
+
+            label = (TextView) row.findViewById(R.id.label);
+            icon = (ImageView) row.findViewById(R.id.icon);
+        }
+
+        @Override
+        public void onClick(View v) {
+            String item = label.getText().toString();
+            System.out.println(item);//
+//            Intent intent = new Intent(MainActivity.this,AnimalActivity.class);
+//            intent.putExtra("AnimalName",item);
+//            startActivity(intent);
+        }
+
+        void bindModel(String item) {
+            label.setText(item);
+        }
     }
 }
