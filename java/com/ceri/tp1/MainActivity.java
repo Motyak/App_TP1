@@ -12,60 +12,30 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
+
+    private String[] labels = AnimalList.getNameArray();
+//    private ArrayList<String> images = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView rvAnimaux = (RecyclerView) findViewById(R.id.rvAnimaux);
-        rvAnimaux.setHasFixedSize(true);
+        initRecyclerView();
+    }
+
+    private void initRecyclerView() {
+        RecyclerView rvAnimaux = findViewById(R.id.rvAnimaux);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, labels);
+        rvAnimaux.setAdapter(adapter);
         rvAnimaux.setLayoutManager(new LinearLayoutManager(this));
         rvAnimaux.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        rvAnimaux.setAdapter(new IconicAdapter());
-    }
-
-    class IconicAdapter extends RecyclerView.Adapter<RowHolder> {
-        @Override
-        public RowHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new RowHolder(getLayoutInflater().inflate(R.layout.row, parent, false));
-        }
-
-        @Override
-        public void onBindViewHolder(RowHolder holder, int position) {
-            holder.bindModel(AnimalList.getNameArray()[position]);
-        }
-
-        @Override
-        public int getItemCount() {
-            return AnimalList.getNameArray().length;
-        }
-    }
-
-    static class RowHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView label = null;
-        ImageView icon = null;
-
-        RowHolder(View row) {
-            super(row);
-
-            label = (TextView) row.findViewById(R.id.label);
-            icon = (ImageView) row.findViewById(R.id.icon);
-        }
-
-        @Override
-        public void onClick(View v) {
-            String item = label.getText().toString();
-            System.out.println(item);//
-//            Intent intent = new Intent(MainActivity.this,AnimalActivity.class);
-//            intent.putExtra("AnimalName",item);
-//            startActivity(intent);
-        }
-
-        void bindModel(String item) {
-            label.setText(item);
-        }
+        rvAnimaux.setHasFixedSize(true);//
     }
 }
